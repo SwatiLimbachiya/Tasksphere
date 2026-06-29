@@ -4,8 +4,10 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.shortcuts import render, redirect, get_object_or_404
-
 from .models import Task
+
+from rest_framework import viewsets
+from .serializers import TaskSerializer
 
 
 # ---------------- LOGIN ----------------
@@ -173,3 +175,8 @@ def toggle_status_view(request, task_id):
 def logout_view(request):
     logout(request)
     return redirect('login')
+
+# ---------------- REST API ----------------
+class TaskViewSet(viewsets.ModelViewSet):
+    queryset = Task.objects.all()
+    serializer_class = TaskSerializer
