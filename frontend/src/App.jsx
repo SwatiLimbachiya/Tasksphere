@@ -4,42 +4,54 @@ function App() {
   const [tasks, setTasks] = useState([]);
 
   useEffect(() => {
-    fetch(import.meta.env.VITE_API_URL)
-      .then((response) => response.json())
-      .then((data) => setTasks(data))
-      .catch((error) => console.error(error));
+    fetch("http://127.0.0.1:8000/api/tasks/")
+      .then((res) => res.json())
+      .then((data) => setTasks(data));
   }, []);
 
   return (
-    <div style={{ padding: "40px", fontFamily: "Arial" }}>
-      <h1>🚀 TaskSphere</h1>
-      <h3>Tasks from Django API</h3>
+    <div style={styles.container}>
+      <h1 style={styles.heading}>Tasks</h1>
 
-      {tasks.length === 0 ? (
-        <p>No tasks found.</p>
-      ) : (
-        <table border="1" cellPadding="10">
-          <thead>
-            <tr>
-              <th>Title</th>
-              <th>Status</th>
-              <th>Priority</th>
-            </tr>
-          </thead>
-
-          <tbody>
-            {tasks.map((task) => (
-              <tr key={task.id}>
-                <td>{task.title}</td>
-                <td>{task.status}</td>
-                <td>{task.priority}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      )}
+      <div style={styles.grid}>
+        {tasks.map((task) => (
+          <div key={task.id} style={styles.card}>
+            <h3>{task.title}</h3>
+            <p>{task.status}</p>
+            <p>{task.priority}</p>
+          </div>
+        ))}
+      </div>
     </div>
   );
-}
+}  // 👈 END OF COMPONENT
+
+// 🔥 ADD THIS BELOW (STEP 2 STYLING)
+const styles = {
+  container: {
+    padding: "20px",
+    fontFamily: "Arial",
+    backgroundColor: "#f5f6fa",
+    minHeight: "100vh",
+  },
+
+  heading: {
+    textAlign: "center",
+    marginBottom: "20px",
+  },
+
+  grid: {
+    display: "grid",
+    gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))",
+    gap: "15px",
+  },
+
+  card: {
+    backgroundColor: "white",
+    padding: "15px",
+    borderRadius: "10px",
+    boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
+  },
+};
 
 export default App;
